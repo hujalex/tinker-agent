@@ -1,0 +1,232 @@
+{
+  "version": "1",
+  "metadata": {
+    "marimo_version": "0.23.4",
+    "script_metadata_hash": null
+  },
+  "cells": [
+    {
+      "id": "Hbol",
+      "code_hash": "1d0db38904205bec4d6f6f6a1f6cec3e",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "MJUe",
+      "code_hash": "bcab11794d3c5a86458a0976d5391c16",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h1 id=\"tutorial-01-hello-tinker\">Tutorial 01: Hello Tinker</h1>\n<span class=\"paragraph\">Tinker is a remote GPU service for LLM training and inference. You write training loops in Python on your local machine; Tinker executes the heavy GPU operations (forward passes, backpropagation, sampling) on remote workers.</span>\n<div class=\"language-brainfuck codehilite\"><pre><span></span><code><span class=\"c\">Your machine (CPU)                    Tinker Service (GPU)</span>\n<span class=\"nb\">+-----------------------+</span><span class=\"c\">             </span><span class=\"nb\">+------------------------+</span>\n<span class=\"c\">| Python training loop  |  </span><span class=\"nb\">--------</span><span class=\"nv\">&gt;</span><span class=\"c\">  | Forward/backward pass  |</span>\n<span class=\"c\">| Data preparation      |  </span><span class=\"nv\">&lt;</span><span class=\"nb\">--------</span><span class=\"c\">  | Optimizer steps        |</span>\n<span class=\"c\">| Evaluation logic      |             | Text generation        |</span>\n<span class=\"nb\">+-----------------------+</span><span class=\"c\">             </span><span class=\"nb\">+------------------------+</span>\n</code></pre></div>\n<span class=\"paragraph\">You control the logic. Tinker runs the compute.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "vblA",
+      "code_hash": "7672ddcbc1d96f12c0669000546c6924",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "bkHC",
+      "code_hash": "506cab87c13e4c974b8c320019f97284",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"the-client-hierarchy\">The client hierarchy</h2>\n<span class=\"paragraph\">The entry point to Tinker is the <strong>ServiceClient</strong>. From it, you create specialized clients:</span>\n<ul>\n<li><strong>SamplingClient</strong> -- generates text from a model (inference)</li>\n<li><strong>TrainingClient</strong> -- runs forward/backward passes and optimizer steps (training)</li>\n</ul>\n<span class=\"paragraph\">Both talk to the same remote GPU workers. Let's start with the ServiceClient.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "lEQa",
+      "code_hash": "4e9069acd618c0049ce7c0eed0717de1",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<marimo-ui-element object-id='lEQa-0' random-id='5188b013-4485-8d90-7fba-5eb4d9e1ba5f'><marimo-text data-initial-value='&quot;&quot;' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Paste your Tinker API key&lt;/span&gt;&lt;/span&gt;&quot;' data-placeholder='&quot;&quot;' data-kind='&quot;password&quot;' data-full-width='false' data-disabled='false' data-debounce='true'></marimo-text></marimo-ui-element>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "PKri",
+      "code_hash": "c079c2c9fc415aeb0ca01cd8d174972d",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Available models:\n  - deepseek-ai/DeepSeek-V3.1\n  - deepseek-ai/DeepSeek-V3.1-Base\n  - moonshotai/Kimi-K2-Thinking\n  - moonshotai/Kimi-K2.5\n  - moonshotai/Kimi-K2.5:peft:131072\n  - moonshotai/Kimi-K2.6\n  - moonshotai/Kimi-K2.6:peft:131072\n  - meta-llama/Llama-3.1-70B\n  - meta-llama/Llama-3.1-8B\n  - meta-llama/Llama-3.1-8B-Instruct\n  - meta-llama/Llama-3.2-1B\n  - meta-llama/Llama-3.2-3B\n  - meta-llama/Llama-3.3-70B-Instruct\n  - nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16\n  - nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16\n  - nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16:peft:262144\n  - Qwen/Qwen3-235B-A22B-Instruct-2507\n  - Qwen/Qwen3-30B-A3B\n  - Qwen/Qwen3-30B-A3B-Base\n  - Qwen/Qwen3-30B-A3B-Instruct-2507\n  - Qwen/Qwen3-32B\n  - Qwen/Qwen3-4B-Instruct-2507\n  - Qwen/Qwen3-8B\n  - Qwen/Qwen3-8B-Base\n  - Qwen/Qwen3-VL-235B-A22B-Instruct\n  - Qwen/Qwen3-VL-30B-A3B-Instruct\n  - Qwen/Qwen3.5-27B\n  - Qwen/Qwen3.5-35B-A3B\n  - Qwen/Qwen3.5-397B-A17B\n  - Qwen/Qwen3.5-397B-A17B:peft:262144\n  - Qwen/Qwen3.5-4B\n  - Qwen/Qwen3.6-27B\n  - Qwen/Qwen3.6-35B-A3B\n  - openai/gpt-oss-120b\n  - openai/gpt-oss-120b:peft:131072\n  - openai/gpt-oss-20b\n",
+          "mimetype": "text/plain"
+        }
+      ]
+    },
+    {
+      "id": "Xref",
+      "code_hash": "63e62891c0e0a75f0c3406f9bd63c97b",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"sampling-from-a-model\">Sampling from a model</h2>\n<span class=\"paragraph\">Let's create a <strong>SamplingClient</strong> to generate text. We will use <code>Qwen/Qwen3-4B-Instruct-2507</code>, a compact model that keeps costs low.</span>\n<span class=\"paragraph\">The sampling workflow is:</span>\n<ol>\n<li>Create a <code>SamplingClient</code> with a base model name</li>\n<li>Encode your prompt into tokens using the model's tokenizer</li>\n<li>Call <code>sample()</code> with the prompt and sampling parameters</li>\n<li>Decode the returned tokens back into text</li>\n</ol></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "SFPL",
+      "code_hash": "0d5c610ac6f37afbdbc9ec0114eb1236",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "BYtC",
+      "code_hash": "f49bc02a507f693bd8d67d71405c165e",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "The three largest cities in the world by population are Tokyo, Delhi, and Shanghai. The population of Tokyo is 10 million more than the population of Delhi. The population of Shanghai is 4 million less than the population of Tokyo. If the total population of these three cities is 10\n",
+          "mimetype": "text/plain"
+        }
+      ]
+    },
+    {
+      "id": "RGSE",
+      "code_hash": "68e2f5a3532ada26b6d687b58552c854",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"inspecting-the-response\">Inspecting the response</h2>\n<span class=\"paragraph\">The <code>sample()</code> call returns a <code>SampleResponse</code> containing a list of <code>SampledSequence</code> objects. Each sequence has:</span>\n<ul>\n<li><code>tokens</code> -- the generated token IDs</li>\n<li><code>logprobs</code> -- log probability of each generated token (if requested)</li>\n<li><code>stop_reason</code> -- why generation stopped (e.g., hit max tokens, hit a stop string)</li>\n</ul></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Kclp",
+      "code_hash": "d99c23721796cd696fd5427c72a8755d",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Stop reason:    length\nTokens generated: 50\nToken IDs:      [26194, 11, 21996, 11, 323, 37047, 13, 576, 7042, 315]...\nLog probs:      [-0.5095227956771851, -0.004706732928752899, -0.3167707324028015, -3.182837463100441e-05, 0.0, -0.047452379018068314, -0.010109529830515385, -0.8879117965698242, -0.0897860899567604, -0.00013672371278516948, -0.010260689072310925, -0.0001438752660760656, -0.04069400206208229, -0.019599348306655884, -1.145564317703247, -0.08992666006088257, -0.4848020672798157, -2.3841855067985307e-07, -0.4495600163936615, -0.00017891713650897145, 0.0, -0.019546743482351303, -1.114974856376648, -0.003147649811580777, -0.0002015625941567123, -1.1920928244535389e-07, -0.9965225458145142, -5.602820692729438e-06, -0.008589701727032661, -2.4742181301116943, -0.004104642663151026, -0.09429174661636353, 0.0, -0.021960420534014702, -0.002356849145144224, 0.0, -1.1127690076828003, -5.972207145532593e-05, -0.41463062167167664, -0.0003921216703020036, -0.14304153621196747, -0.00046361665590666234, -0.00019059749320149422, -0.29897722601890564, -0.0023059463128447533, -1.1920928244535389e-07, -0.006721151061356068, -0.00023755589791107923, -0.41392526030540466, -0.49508821964263916]\n",
+          "mimetype": "text/plain"
+        }
+      ]
+    },
+    {
+      "id": "emfo",
+      "code_hash": "0353a4f9bb28f2c10b3023f24c97160f",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\">You can also generate multiple samples at once by setting <code>num_samples</code>. Each sample is an independent completion from the same prompt.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Hstk",
+      "code_hash": "cced0442e4e767917b4673ed5911087c",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stdout",
+          "text": "Sample 0:  New York, Tokyo, and London. The population of Tokyo is 10% larger than the population of New York, and London's population is 20% smaller than the population of New York. If the population of New York is \nSample 1:  Tokyo, Delhi, and Shanghai. The population of Tokyo is 13.4 million, Delhi is 22.1 million, and Shanghai is 21.7 million. What is the average population of these three cities, rounded to\nSample 2:  London, Tokyo, and New York. How can we estimate the population of Tokyo if we know that the total population of these three cities is $3.5 \\times 10^7$ and that the population of London is about $8\n",
+          "mimetype": "text/plain"
+        }
+      ]
+    },
+    {
+      "id": "nWHF",
+      "code_hash": "600534b86401ae72da9abbbd2847b20f",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"what-about-training\">What about training?</h2>\n<span class=\"paragraph\">So far we have only done inference. The real power of Tinker is <strong>training</strong> -- running forward/backward passes and optimizer steps on remote GPUs while you control the training loop locally.</span>\n<span class=\"paragraph\">The workflow looks like this:</span>\n<ol>\n<li>Create a <strong>TrainingClient</strong> with <code>service_client.create_lora_training_client()</code></li>\n<li>Prepare training data as <code>Datum</code> objects (input tokens + loss targets)</li>\n<li>Call <code>training_client.forward_backward()</code> to compute gradients</li>\n<li>Call <code>training_client.optim_step()</code> to update weights</li>\n<li>Save weights and create a <strong>SamplingClient</strong> to evaluate the trained model</li>\n</ol>\n<span class=\"paragraph\">We will walk through this in the next tutorial.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "iLit",
+      "code_hash": "3174ea60dd5610d36df1c4299f053a4f",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"next-steps\">Next steps</h2>\n<ul>\n<li><strong><a href=\"./102_first_sft.py\">Tutorial 02: First SFT</a></strong> -- Train a model with supervised fine-tuning</li>\n<li><strong><a href=\"https://docs.thinkingmachines.ai/training-sampling\" rel=\"noopener noreferrer\" target=\"_blank\">Getting Started Guide</a></strong> -- Full walkthrough of training and sampling</li>\n<li><strong><a href=\"https://docs.thinkingmachines.ai/model-lineup\" rel=\"noopener noreferrer\" target=\"_blank\">Available Models</a></strong> -- All supported models and their characteristics</li>\n</ul></span>"
+          }
+        }
+      ],
+      "console": []
+    }
+  ]
+}
